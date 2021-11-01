@@ -190,7 +190,15 @@ void log_msg(char *file, char *function, int line, char l, char *s, ... )
 		if(!use_syslog) fprintf(stderr, "\033[%im", colour);
 	}
 	
-	if(!use_syslog) write(fd_log, o, strlen(o));
+        int anErr = 0;
+
+        if(!use_syslog)
+        {
+               anErr = write(fd_log, o, strlen(o));
+
+               if (anErr < 0)
+                       fprintf(stderr, "Pb with write()" );
+        }
 	else
 	{
 		int p = LOG_INFO;
